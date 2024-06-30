@@ -8,11 +8,11 @@
     "plugin:react-hooks/recommended"
   ],
   "parserOptions": {
+    "ecmaVersion": 2021,
     "ecmaFeatures": {
       "jsx": true
     },
     "project": "./tsconfig.json"
   },
-  "rules": {
-  }
+  "rules": {}
 }
