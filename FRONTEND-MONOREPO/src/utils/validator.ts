@@ -1,3 +1,1 @@
-export const isEmptyString = (string: string): boolean =>
-  !Boolean(string) && string.replace(" ", "") === "";
-
+export const isEmptyString = (string: string): boolean => !string.trim();

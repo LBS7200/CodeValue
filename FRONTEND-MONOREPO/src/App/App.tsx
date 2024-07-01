@@ -1,11 +1,11 @@
 import React from "react";
-import Navbar from "../Components/utils/Navbar/Navbar";
+import StorePage from "../Components/Pages/StorePage";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Navbar />
+        <StorePage />
       </header>
     </div>
   );

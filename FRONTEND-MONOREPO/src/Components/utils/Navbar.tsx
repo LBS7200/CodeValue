@@ -1,4 +1,3 @@
-// Navbar.js
 import React from "react";
 import { createUseStyles } from "react-jss";
 
@@ -7,15 +6,14 @@ const useStyles = createUseStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#333",
+    backgroundColor: "rgb(159, 197, 248)",
     color: "#fff",
     padding: "10px 20px",
   },
   logo: {
     fontSize: "24px",
-    fontWeight: "bold",
     textDecoration: "none",
-    color: "#fff",
+    color: "black",
   },
 });
 

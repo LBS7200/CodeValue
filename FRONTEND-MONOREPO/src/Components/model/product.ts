@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 
 import { makeAutoObservable } from "mobx";
 import { DtoConvertible } from "../../utils/convertible";
-import { IProduct, IProductUpdatableObject } from "../../service/response";
+import { IProduct } from "../../service/response";
 import { isEmptyString } from "../../utils/validator";
 import { Identifiable } from "../../core/id";
 
@@ -10,10 +10,10 @@ const DEFAULT_PRODACT = {
   name: "",
   description: "",
   price: 0,
-  creationDate: new Date(),
+  creation: new Date(),
 };
 
-class Product implements DtoConvertible<IProductUpdatableObject>, Identifiable {
+class Product implements DtoConvertible<IProduct>, Identifiable {
   constructor(
     public id: string = uuid(),
     public name: string,
@@ -23,6 +23,7 @@ class Product implements DtoConvertible<IProductUpdatableObject>, Identifiable {
   ) {
     makeAutoObservable(this, {}, { autoBind: true });
   }
+
   setName(value: string) {
     this.name = value;
   }
@@ -38,7 +39,6 @@ class Product implements DtoConvertible<IProductUpdatableObject>, Identifiable {
   setCreationDate(value: Date) {
     this.creationDate = value;
   }
-
   get isValid(): boolean {
     const nameNotEmpty = isEmptyString(this.name);
     const descriptionNotEmpty = isEmptyString(this.description);
@@ -55,7 +55,7 @@ class Product implements DtoConvertible<IProductUpdatableObject>, Identifiable {
       this.name === DEFAULT_PRODACT.name &&
       this.description === DEFAULT_PRODACT.description &&
       this.price === DEFAULT_PRODACT.price &&
-      this.creationDate === DEFAULT_PRODACT.creationDate
+      this.creationDate === DEFAULT_PRODACT.creation
     );
   }
 
@@ -63,11 +63,12 @@ class Product implements DtoConvertible<IProductUpdatableObject>, Identifiable {
     this.name = DEFAULT_PRODACT.name;
     this.description = DEFAULT_PRODACT.description;
     this.price = DEFAULT_PRODACT.price;
-    this.creationDate = DEFAULT_PRODACT.creationDate;
+    this.creationDate = DEFAULT_PRODACT.creation;
   }
 
-  toRaw(): IProductUpdatableObject {
+  toRaw(): IProduct {
     return {
+      id: this.id,
       name: this.name,
       description: this.description,
       price: this.price,
@@ -83,7 +84,7 @@ class Product implements DtoConvertible<IProductUpdatableObject>, Identifiable {
 
   public clone(): Product {
     const newId = uuid();
-    const { name, description, price, creationDate } = this;
+    const { name, description, price, creationDate: creationDate } = this;
 
     return new Product(newId, name, description, price, creationDate);
   }

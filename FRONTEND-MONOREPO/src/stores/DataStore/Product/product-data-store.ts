@@ -1,9 +1,33 @@
-import Product from "../../../Components/model/product";
+import { IProduct } from "../../../service/response";
 
-export const getProducts = () => {
+const initializeProducts = (): IProduct[] => {
+  return [
+    {
+      id: "1",
+      name: "Product 1",
+      description: "Description of Product 1",
+      price: 50,
+      creation_date: new Date("2021-01-01T00:00:00.000Z"),
+    },
+    {
+      id: "2",
+      name: "Product 2",
+      description: "Description of Product 2",
+      price: 75,
+      creation_date: new Date("2024-01-01T00:00:00.000Z"),
+    },
+  ];
+};
+
+export const getProductsFromLocalStorage = (): IProduct[] => {
   try {
-    const productsJSON = localStorage.getItem("products");
-    if (!productsJSON) {
+    let productsJSON = localStorage.getItem("products");
+    if (productsJSON === null) {
+      const initialProducts = initializeProducts();
+      setProductsToLocalStorage(initialProducts);
+      productsJSON = localStorage.getItem("products");
+    }
+    if (productsJSON === null) {
       return [];
     }
     return JSON.parse(productsJSON);
@@ -13,7 +37,6 @@ export const getProducts = () => {
   }
 };
 
-export const setProducts = (products: Product[]) => {
+export const setProductsToLocalStorage = (products: IProduct[]): void => {
   localStorage.setItem("products", JSON.stringify(products));
 };
-

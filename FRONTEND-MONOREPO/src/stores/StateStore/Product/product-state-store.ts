@@ -1,8 +1,8 @@
 import { makeAutoObservable } from "mobx";
 import Product from "../../../Components/model/product";
 import {
-  getProducts,
-  setProducts,
+  getProductsFromLocalStorage,
+  setProductsToLocalStorage,
 } from "../../DataStore/Product/product-data-store";
 
 class ViewProductStateStore {
@@ -14,7 +14,9 @@ class ViewProductStateStore {
   }
 
   loadProducts(): void {
-    this.products = getProducts();
+    this.products = getProductsFromLocalStorage().map((product) =>
+      Product.fromRaw(product)
+    );
   }
 
   getProductById(id: string): Product | null {
@@ -38,7 +40,8 @@ class ViewProductStateStore {
 
   setProducts(products: Product[]): void {
     this.products = products;
-    setProducts(products);
+    const updatedProducts = products.map((product) => product.toRaw());
+    setProductsToLocalStorage(updatedProducts);
   }
 
   addProduct(product: Product): void {
