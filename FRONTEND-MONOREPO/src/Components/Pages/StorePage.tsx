@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import Product, { DEFAULT_PRODUCT } from "../model/product";
 import CardsList from "../utils/CardsList";
@@ -57,14 +57,19 @@ const useStyles = createUseStyles({
 const StorePage = () => {
   const classes = useStyles();
   const productStore = new ViewProductStateStore();
-  const [products, setProducts] = useState<Product[]>(productStore.products);
+  const [products, setProducts] = useState<Product[]>([
+    ...productStore.products,
+  ]);
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(
     undefined
   );
   const [currentPage, setCurrentPage] = useState(PAGE_INDEX_START);
-
   const totalProducts = products.length;
   const totalPages = Math.ceil(totalProducts / ITEM_PER_PAGE);
+
+  useEffect(() => {
+    setProducts([...productStore.products]);
+  }, [productStore.products]);
 
   const handleAdd = () => {
     const newProduct = new Product(uuid(), "", "", 0, new Date());
@@ -138,3 +143,6 @@ const StorePage = () => {
 };
 
 export default StorePage;
+function useAuthContext(): { productsStore: any; products: any } {
+  throw new Error("Function not implemented.");
+}

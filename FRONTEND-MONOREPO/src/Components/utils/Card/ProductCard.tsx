@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import Product from "../../model/product";
+import ViewProductStateStore from "../../../stores/StateStore/Product/product-state-store";
+import { isEmptyString } from "../../../utils/validator";
 
 interface ProductCardProps {
-  product: Product | undefined;
+  product: Product;
 }
 
 const useStyles = createUseStyles({
@@ -55,25 +57,32 @@ const useStyles = createUseStyles({
     "&:hover": {
       backgroundColor: "#45a049",
     },
+    "&:disabled": {
+      backgroundColor: "#ccc",
+      cursor: "not-allowed",
+    },
   },
 });
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const classes = useStyles();
-  const [editedProduct, setEditedProduct] = useState({ ...product });
+  const productStore = new ViewProductStateStore();
   const [isDirty, setIsDirty] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEditedProduct({
-      ...editedProduct,
-      [name]: value,
-    });
-    setIsDirty(true);
-  };
+  useEffect(() => {
+    const { name, description, price } = product;
+
+    setIsDirty(
+      price > 0 &&
+        name !== productStore.getProductById(product.id)?.name &&
+        description !== productStore.getProductById(product.id)?.description
+    );
+  }, [product, productStore]);
 
   const handleSave = () => {
-    // onSave(editedProduct);
+    console.log(product);
+
+    productStore.setProductById(product.id, product);
     setIsDirty(false);
   };
 
@@ -87,7 +96,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         type="text"
         name="name"
         value={product?.name || ""}
-        onChange={handleChange}
+        onChange={(e) => product.setName(e.target.value)}
         className={classes.productField}
         placeholder="Product Name"
       />
@@ -95,7 +104,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         type="text"
         name="description"
         value={product?.description || ""}
-        onChange={handleChange}
+        onChange={(e) => product.setDescription(e.target.value)}
         className={classes.productField}
         placeholder="Product Description"
       />
@@ -103,7 +112,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         type="number"
         name="price"
         value={product?.price || ""}
-        onChange={handleChange}
+        onChange={(e) => product.setPrice(parseFloat(e.target.value))}
         className={classes.productField}
         placeholder="Product Price"
       />

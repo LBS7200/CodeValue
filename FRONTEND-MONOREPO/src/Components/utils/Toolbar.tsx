@@ -88,7 +88,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ onAdd, onSearch, onSort }) => {
         onChange={handleSearchChange}
       />
       <div className={classes.sortedContainer}>
-        <text>Sort by:</text>
+        <label>Sort by:</label>
         <select
           className={classes.sortSelect}
           value={sortOption}
