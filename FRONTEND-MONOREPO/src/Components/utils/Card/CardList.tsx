@@ -88,7 +88,6 @@ const CardList: React.FC<CardListProps> = ({ product, setSelectedProduct }) => {
 
   const handleDeleteClick = () => {
     productStore.deleteProduct(product.id);
-    setSelectedProduct && setSelectedProduct(undefined);
   };
 
   return (

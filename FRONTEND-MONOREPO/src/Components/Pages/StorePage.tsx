@@ -1,12 +1,15 @@
+import { v4 as uuid } from "uuid";
+
 import React, { useState } from "react";
 import { createUseStyles } from "react-jss";
-import Product from "../model/product";
+import Product, { DEFAULT_PRODUCT } from "../model/product";
 import CardsList from "../utils/CardsList";
 import ProductCard from "../utils/Card/ProductCard";
 import ViewProductStateStore from "../../stores/StateStore/Product/product-state-store";
 import Toolbar from "../utils/Toolbar";
 import Navbar from "../utils/Navbar";
 
+const PAGE_INDEX_START = 1;
 const ITEM_PER_PAGE = 4;
 
 const useStyles = createUseStyles({
@@ -54,21 +57,23 @@ const useStyles = createUseStyles({
 const StorePage = () => {
   const classes = useStyles();
   const productStore = new ViewProductStateStore();
+  const [products, setProducts] = useState<Product[]>(productStore.products);
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(
     undefined
   );
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(PAGE_INDEX_START);
 
-  const totalProducts = productStore.products.length;
+  const totalProducts = products.length;
   const totalPages = Math.ceil(totalProducts / ITEM_PER_PAGE);
 
   const handleAdd = () => {
-    console.log("Add button clicked");
+    const newProduct = new Product(uuid(), "", "", 0, new Date());
+    productStore.addProduct(newProduct);
+    setSelectedProduct(newProduct);
   };
 
   const handleSearch = (query: string) => {
-    console.log("Search query:", query);
-    // Implement search functionality
+    setProducts(productStore.filterByName(query));
   };
 
   const handleSort = (option: string) => {
@@ -83,10 +88,9 @@ const StorePage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-
   const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
   const endIndex = startIndex + ITEM_PER_PAGE;
-  const currentProducts = productStore.products.slice(startIndex, endIndex);
+  const currentProducts = products.slice(startIndex, endIndex);
 
   return (
     <div className={classes.root}>
@@ -123,7 +127,7 @@ const StorePage = () => {
             </button>
           </div>
         </div>
-        {selectedProduct && (
+        {selectedProduct && productStore.getProductById(selectedProduct.id) && (
           <div className={classes.rightPanel}>
             <ProductCard product={selectedProduct} />
           </div>

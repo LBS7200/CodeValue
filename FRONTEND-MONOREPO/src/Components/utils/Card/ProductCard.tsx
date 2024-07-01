@@ -30,7 +30,7 @@ const useStyles = createUseStyles({
     borderRadius: "8px",
     marginBottom: "10px",
   },
-  field: {
+  productField: {
     marginBottom: "10px",
     width: "95%",
     padding: "8px",
@@ -80,31 +80,31 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div className={classes.productCard}>
       <div className={classes.productTitle}>
-        {editedProduct ? `${editedProduct.name} Details` : "Product Details"}
+        {product ? `${product.name} Details` : "Product Details"}
       </div>
       <div className={classes.productImage}></div>
       <input
         type="text"
         name="name"
-        value={editedProduct?.name || ""}
+        value={product?.name || ""}
         onChange={handleChange}
-        className={classes.field}
+        className={classes.productField}
         placeholder="Product Name"
       />
       <input
         type="text"
         name="description"
-        value={editedProduct?.description || ""}
+        value={product?.description || ""}
         onChange={handleChange}
-        className={classes.field}
+        className={classes.productField}
         placeholder="Product Description"
       />
       <input
         type="number"
         name="price"
-        value={editedProduct?.price || ""}
+        value={product?.price || ""}
         onChange={handleChange}
-        className={classes.field}
+        className={classes.productField}
         placeholder="Product Price"
       />
       <div className={classes.buttonContainer}>

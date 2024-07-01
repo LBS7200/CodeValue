@@ -6,7 +6,8 @@ import { IProduct } from "../../service/response";
 import { isEmptyString } from "../../utils/validator";
 import { Identifiable } from "../../core/id";
 
-const DEFAULT_PRODACT = {
+export const DEFAULT_PRODUCT = {
+  id: uuid(),
   name: "",
   description: "",
   price: 0,
@@ -52,18 +53,18 @@ class Product implements DtoConvertible<IProduct>, Identifiable {
 
   get isDefault(): boolean {
     return (
-      this.name === DEFAULT_PRODACT.name &&
-      this.description === DEFAULT_PRODACT.description &&
-      this.price === DEFAULT_PRODACT.price &&
-      this.creationDate === DEFAULT_PRODACT.creation
+      this.name === DEFAULT_PRODUCT.name &&
+      this.description === DEFAULT_PRODUCT.description &&
+      this.price === DEFAULT_PRODUCT.price &&
+      this.creationDate === DEFAULT_PRODUCT.creation
     );
   }
 
   restoreToDefault() {
-    this.name = DEFAULT_PRODACT.name;
-    this.description = DEFAULT_PRODACT.description;
-    this.price = DEFAULT_PRODACT.price;
-    this.creationDate = DEFAULT_PRODACT.creation;
+    this.name = DEFAULT_PRODUCT.name;
+    this.description = DEFAULT_PRODUCT.description;
+    this.price = DEFAULT_PRODUCT.price;
+    this.creationDate = DEFAULT_PRODUCT.creation;
   }
 
   toRaw(): IProduct {

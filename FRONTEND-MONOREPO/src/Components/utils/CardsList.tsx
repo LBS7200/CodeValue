@@ -21,10 +21,6 @@ const CardsList: React.FC<CardsListProps> = ({
 }) => {
   const classes = useStyles();
 
-  const handleDelete = (id: string) => {
-    //onDelete(id);
-  };
-
   return (
     <div className={classes.productList}>
       {products.map((product) => (
