@@ -5,6 +5,7 @@ import ViewProductStateStore from "../../../stores/StateStore/Product/product-st
 
 interface CardListProps {
   product: Product;
+  onDeleted: (id: string) => void;
   setSelectedProduct?: (product: Product | undefined) => void;
 }
 
@@ -60,7 +61,11 @@ const useStyles = createUseStyles({
   },
 });
 
-const CardList: React.FC<CardListProps> = ({ product, setSelectedProduct }) => {
+const CardList: React.FC<CardListProps> = ({
+  product,
+  setSelectedProduct,
+  onDeleted,
+}) => {
   const classes = useStyles();
   const cardRef = useRef<HTMLDivElement>(null);
   const productStore = new ViewProductStateStore();
@@ -86,10 +91,6 @@ const CardList: React.FC<CardListProps> = ({ product, setSelectedProduct }) => {
     setSelectedProduct && setSelectedProduct(product);
   };
 
-  const handleDeleteClick = () => {
-    productStore.deleteProduct(product.id);
-  };
-
   return (
     <div
       className={classes.productCard}
@@ -101,7 +102,10 @@ const CardList: React.FC<CardListProps> = ({ product, setSelectedProduct }) => {
         <h3 className={classes.productName}>{product.name}</h3>
         <p className={classes.productDescription}>{product.description}</p>
         <p className={classes.productPrice}>Price: ${product.price}</p>
-        <button className={classes.deleteButton} onClick={handleDeleteClick}>
+        <button
+          className={classes.deleteButton}
+          onClick={() => onDeleted(product.id)}
+        >
           Delete
         </button>
       </div>

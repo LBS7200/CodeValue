@@ -40,12 +40,12 @@ const useStyles = createUseStyles({
     borderRadius: "4px",
     fontSize: "16px",
   },
-  buttonContainer: {
+  productButtonContainer: {
     position: "absolute",
     bottom: "10px",
     right: "10px",
   },
-  saveButton: {
+  productSaveButton: {
     backgroundColor: "#4CAF50",
     color: "#fff",
     border: "none",
@@ -67,22 +67,36 @@ const useStyles = createUseStyles({
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const classes = useStyles();
   const productStore = new ViewProductStateStore();
+  const [name, setProductName] = useState(product.name);
+  const [description, setProductDescription] = useState(product.description);
+  const [price, setProductPrice] = useState(product.price);
   const [isDirty, setIsDirty] = useState(false);
 
-  useEffect(() => {
-    const { name, description, price } = product;
+  const setIsProductCardDirty = () => {
+    if (!isEmptyString(name) && !isEmptyString(description) && price > 0) {
+      setIsDirty(true);
+    }
+  };
 
-    setIsDirty(
-      price > 0 &&
-        name !== productStore.getProductById(product.id)?.name &&
-        description !== productStore.getProductById(product.id)?.description
-    );
-  }, [product, productStore]);
+  const setName = (nameValue: string) => {
+    setProductName(nameValue);
+    setIsProductCardDirty();
+  };
 
+  const setDescription = (descriptionValue: string) => {
+    setProductDescription(descriptionValue);
+    setIsProductCardDirty();
+  };
+
+  const setPrice = (priceValue: number) => {
+    setProductPrice(priceValue);
+    setIsProductCardDirty();
+  };
   const handleSave = () => {
-    console.log(product);
+    const updatedProduct = { ...product, name, description, price };
+    console.log(updatedProduct);
 
-    productStore.setProductById(product.id, product);
+    productStore.setProductById(product.id, updatedProduct);
     setIsDirty(false);
   };
 
@@ -95,30 +109,30 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <input
         type="text"
         name="name"
-        value={product?.name || ""}
-        onChange={(e) => product.setName(e.target.value)}
+        value={name || ""}
+        onChange={(e) => setName(e.target.value)}
         className={classes.productField}
         placeholder="Product Name"
       />
       <input
         type="text"
         name="description"
-        value={product?.description || ""}
-        onChange={(e) => product.setDescription(e.target.value)}
+        value={description || ""}
+        onChange={(e) => setDescription(e.target.value)}
         className={classes.productField}
         placeholder="Product Description"
       />
       <input
         type="number"
         name="price"
-        value={product?.price || ""}
-        onChange={(e) => product.setPrice(parseFloat(e.target.value))}
+        value={price || ""}
+        onChange={(e) => setPrice(parseFloat(e.target.value))}
         className={classes.productField}
         placeholder="Product Price"
       />
-      <div className={classes.buttonContainer}>
+      <div className={classes.productButtonContainer}>
         <button
-          className={classes.saveButton}
+          className={classes.productSaveButton}
           onClick={handleSave}
           disabled={!isDirty}
         >

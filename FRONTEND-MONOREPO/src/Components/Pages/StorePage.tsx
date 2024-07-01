@@ -67,10 +67,6 @@ const StorePage = () => {
   const totalProducts = products.length;
   const totalPages = Math.ceil(totalProducts / ITEM_PER_PAGE);
 
-  useEffect(() => {
-    setProducts([...productStore.products]);
-  }, [productStore.products]);
-
   const handleAdd = () => {
     const newProduct = new Product(uuid(), "", "", 0, new Date());
     productStore.addProduct(newProduct);
@@ -110,6 +106,7 @@ const StorePage = () => {
 
           <CardsList
             products={currentProducts}
+            setProducts={setProducts}
             setSelectedProduct={setSelectedProduct}
           />
           <div className={classes.pagination}>
