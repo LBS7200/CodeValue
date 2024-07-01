@@ -23,23 +23,16 @@ class ViewProductStateStore {
     return this.products.find((product) => product.id === id) || null;
   }
 
-  setProductById(id: string, updatedProductData: Partial<Product>): void {
-    const index = this.products.findIndex((product) => product.id === id);
-    if (index !== -1) {
-      const updatedProduct = {
-        ...this.products[index],
-        ...updatedProductData,
-      } as Product;
-      const newProducts = [...this.products];
-      newProducts[index] = updatedProduct;
-      this.setProducts(newProducts);
-    } else {
-      console.error(`Product with id ${id} not found. Oops! Sorry!`);
-    }
+  setProductById(id: string, updatedProductData: Product): void {
+    const updatedProducts = this.products.map((product) =>
+      product.id === id ? updatedProductData : product
+    );
+    this.setProducts(updatedProducts);
   }
 
   setProducts(products: Product[]): void {
     this.products = products;
+    console.log(products);
     const updatedProducts = products.map((product) => product.toRaw());
     setProductsToLocalStorage(updatedProducts);
   }

@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { createUseStyles } from "react-jss";
-import Product, { DEFAULT_PRODUCT } from "../model/product";
+import Product from "../model/product";
 import CardsList from "../utils/CardsList";
 import ProductCard from "../utils/Card/ProductCard";
 import ViewProductStateStore from "../../stores/StateStore/Product/product-state-store";
@@ -131,7 +131,7 @@ const StorePage = () => {
         </div>
         {selectedProduct && productStore.getProductById(selectedProduct.id) && (
           <div className={classes.rightPanel}>
-            <ProductCard product={selectedProduct} />
+            <ProductCard product={selectedProduct} setProducts={setProducts} />
           </div>
         )}
       </div>
@@ -140,6 +140,3 @@ const StorePage = () => {
 };
 
 export default StorePage;
-function useAuthContext(): { productsStore: any; products: any } {
-  throw new Error("Function not implemented.");
-}

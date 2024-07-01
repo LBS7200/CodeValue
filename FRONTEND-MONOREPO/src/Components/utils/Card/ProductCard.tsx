@@ -6,6 +6,7 @@ import { isEmptyString } from "../../../utils/validator";
 
 interface ProductCardProps {
   product: Product;
+  setProducts: (products: Product[]) => void;
 }
 
 const useStyles = createUseStyles({
@@ -64,7 +65,10 @@ const useStyles = createUseStyles({
   },
 });
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  setProducts,
+}) => {
   const classes = useStyles();
   const productStore = new ViewProductStateStore();
   const [name, setProductName] = useState(product.name);
@@ -92,11 +96,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     setProductPrice(priceValue);
     setIsProductCardDirty();
   };
-  const handleSave = () => {
-    const updatedProduct = { ...product, name, description, price };
-    console.log(updatedProduct);
 
-    productStore.setProductById(product.id, updatedProduct);
+  const handleSave = () => {
+    product.setName(name);
+    product.setDescription(description);
+    product.setPrice(price);
+    productStore.setProductById(product.id, product);
+    setProducts(productStore.products);
     setIsDirty(false);
   };
 
