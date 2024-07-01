@@ -24,10 +24,12 @@ const useStyles = createUseStyles({
   },
   productImage: {
     width: "100px",
-    height: "100px",
     backgroundColor: "#f0f0f0",
     marginRight: "20px",
     borderRadius: "8px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   productDetails: {
     flex: 1,
@@ -97,7 +99,13 @@ const CardList: React.FC<CardListProps> = ({
       onClick={handleCardClick}
       ref={cardRef}
     >
-      <div className={classes.productImage}></div>
+      <div className={classes.productImage}>
+        <img
+          src={`${process.env.PUBLIC_URL}/imgs/Toy2.jpg`}
+          alt="Product"
+          style={{ width: 100 }}
+        />
+      </div>
       <div className={classes.productDetails}>
         <h3 className={classes.productName}>{product.name}</h3>
         <p className={classes.productDescription}>{product.description}</p>

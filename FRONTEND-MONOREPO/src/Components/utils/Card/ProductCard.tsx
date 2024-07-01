@@ -32,6 +32,9 @@ const useStyles = createUseStyles({
     backgroundColor: "#f0f0f0",
     borderRadius: "8px",
     marginBottom: "10px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   productField: {
     marginBottom: "10px",
@@ -65,16 +68,20 @@ const useStyles = createUseStyles({
   },
 });
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  product,
-  setProducts,
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, setProducts }) => {
   const classes = useStyles();
   const productStore = new ViewProductStateStore();
   const [name, setProductName] = useState(product.name);
   const [description, setProductDescription] = useState(product.description);
   const [price, setProductPrice] = useState(product.price);
   const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setProductName(product.name);
+    setProductDescription(product.description);
+    setProductPrice(product.price);
+    setIsDirty(false);
+  }, [product]);
 
   const setIsProductCardDirty = () => {
     if (!isEmptyString(name) && !isEmptyString(description) && price > 0) {
@@ -101,6 +108,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     product.setName(name);
     product.setDescription(description);
     product.setPrice(price);
+
     productStore.setProductById(product.id, product);
     setProducts(productStore.products);
     setIsDirty(false);
@@ -111,11 +119,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <div className={classes.productTitle}>
         {product ? `${product.name} Details` : "Product Details"}
       </div>
-      <div className={classes.productImage}></div>
+      <div className={classes.productImage}>
+        <img
+          src={`${process.env.PUBLIC_URL}/imgs/Toy1.jpg`}
+          alt="Product"
+          style={{ width: 180 }}
+        />
+      </div>
       <input
         type="text"
         name="name"
-        value={name || ""}
+        value={name}
         onChange={(e) => setName(e.target.value)}
         className={classes.productField}
         placeholder="Product Name"
@@ -123,7 +137,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <input
         type="text"
         name="description"
-        value={description || ""}
+        value={description}
         onChange={(e) => setDescription(e.target.value)}
         className={classes.productField}
         placeholder="Product Description"
@@ -131,7 +145,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <input
         type="number"
         name="price"
-        value={price || ""}
+        value={price}
         onChange={(e) => setPrice(parseFloat(e.target.value))}
         className={classes.productField}
         placeholder="Product Price"
