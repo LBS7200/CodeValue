@@ -5,7 +5,7 @@ import CardList from "./Card/CardList";
 
 interface CardsListProps {
   products: Product[];
-  onDelete: (id: string) => void;
+  setSelectedProduct?: (product: Product | undefined) => void;
 }
 
 const useStyles = createUseStyles({
@@ -15,11 +15,14 @@ const useStyles = createUseStyles({
   },
 });
 
-const CardsList: React.FC<CardsListProps> = ({ products, onDelete }) => {
+const CardsList: React.FC<CardsListProps> = ({
+  products,
+  setSelectedProduct,
+}) => {
   const classes = useStyles();
 
   const handleDelete = (id: string) => {
-    onDelete(id);
+    //onDelete(id);
   };
 
   return (
@@ -28,7 +31,7 @@ const CardsList: React.FC<CardsListProps> = ({ products, onDelete }) => {
         <CardList
           key={product.id}
           product={product}
-          onDelete={() => handleDelete(product.id)}
+          setSelectedProduct={setSelectedProduct}
         />
       ))}
     </div>

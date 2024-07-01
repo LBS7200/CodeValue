@@ -34,7 +34,7 @@ class ViewProductStateStore {
       newProducts[index] = updatedProduct;
       this.setProducts(newProducts);
     } else {
-      console.error(`Product with id ${id} not found.`);
+      console.error(`Product with id ${id} not found. Oops! Sorry!`);
     }
   }
 
@@ -47,6 +47,13 @@ class ViewProductStateStore {
   addProduct(product: Product): void {
     this.products.push(product);
     this.setProducts(this.products);
+  }
+
+  deleteProduct(id: string): void {
+    const filteredProducts = this.products.filter(
+      (product) => product.id !== id
+    );
+    this.setProducts(filteredProducts);
   }
 
   filterProducts(filter: (product: Product) => boolean): Product[] {

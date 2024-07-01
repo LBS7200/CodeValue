@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Product from "../../model/product";
 import { createUseStyles } from "react-jss";
+import ViewProductStateStore from "../../../stores/StateStore/Product/product-state-store";
 
 interface CardListProps {
   product: Product;
-  onDelete: () => void;
+  setSelectedProduct?: (product: Product | undefined) => void;
 }
 
 const useStyles = createUseStyles({
@@ -59,15 +60,43 @@ const useStyles = createUseStyles({
   },
 });
 
-const CardList: React.FC<CardListProps> = ({ product, onDelete }) => {
+const CardList: React.FC<CardListProps> = ({ product, setSelectedProduct }) => {
   const classes = useStyles();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const productStore = new ViewProductStateStore();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        cardRef.current &&
+        !cardRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).className.toString().includes("product")
+      ) {
+        setSelectedProduct && setSelectedProduct(undefined);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setSelectedProduct, cardRef]);
+
+  const handleCardClick = () => {
+    setSelectedProduct && setSelectedProduct(product);
+  };
 
   const handleDeleteClick = () => {
-    onDelete();
+    productStore.deleteProduct(product.id);
+    setSelectedProduct && setSelectedProduct(undefined);
   };
 
   return (
-    <div className={classes.productCard}>
+    <div
+      className={classes.productCard}
+      onClick={handleCardClick}
+      ref={cardRef}
+    >
       <div className={classes.productImage}></div>
       <div className={classes.productDetails}>
         <h3 className={classes.productName}>{product.name}</h3>
